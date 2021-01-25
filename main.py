@@ -4,7 +4,6 @@ import settings
 import base64
 import hashlib
 import hmac
-import json
 
 from typing import (
     Dict,
@@ -15,6 +14,7 @@ from fastapi import (
     FastAPI,
     Header,
     HTTPException,
+    Request,
 )
 from pydantic import (
     BaseModel
@@ -36,14 +36,11 @@ app = FastAPI()
 
 def signatureVerification(x_line_signature, body):
     hash = hmac.new(CHANNEL_SECRET.encode('utf-8'),
-                    body.encode('utf-8'), hashlib.sha256).digest()
+                    body, hashlib.sha256).digest()
     signature = base64.b64encode(hash).decode('utf-8')
 
-    print("x_line_signature", x_line_signature)
+    print("x_line_signature:", x_line_signature)
     print("signature:", signature)
-
-    # Debug
-    return True
 
     if x_line_signature == signature:
         return True
@@ -56,17 +53,29 @@ async def echo():
     return {"message": "hello!!"}
 
 
-@app.post("/callback", status_code=200)
+@app.post("/callback")
 async def callback(
+        request: Request,
         response: Response,
-        dict_body: Dict,
         x_line_signature: Optional[str] = Header(None)):
-
-    json_body = json.dumps(dict_body)
-    print("dict_body:", dict_body)
-    print("json_body:", json_body)
-    if signatureVerification(x_line_signature, json_body):
+    body = await request.body()
+    if signatureVerification(x_line_signature, body):
         response.status_code = HTTP_200_OK
         return {"text": "OK!"}
     else:
         raise HTTPException(status_code=404, detail="Verification failed!!")
+
+# @app.post("/callback", status_code=200)
+# async def callback(
+#         response: Response,
+#         dict_body: Dict,
+#         x_line_signature: Optional[str] = Header(None)):
+
+#     json_body = json.dumps(dict_body)
+#     print("dict_body:", dict_body)
+#     print("json_body:", json_body)
+#     if signatureVerification(x_line_signature, json_body):
+#         response.status_code = HTTP_200_OK
+#         return {"text": "OK!"}
+#     else:
+#         raise HTTPException(status_code=404, detail="Verification failed!!")
