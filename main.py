@@ -58,7 +58,8 @@ async def callback(
         body_data: Dict,
         x_line_signature: Optional[str] = Header(None)):
 
-    # print(CHANNEL_ACCESS_TOKEN)
+    print("x_line_signature:", x_line_signature)
+    print("body_data:", body_data)
 
     json_body = json.dumps(body_data)
     if signatureVerification(x_line_signature, json.dumps(json_body)):
