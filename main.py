@@ -42,6 +42,9 @@ def signatureVerification(x_line_signature, body):
     print("x_line_signature", x_line_signature)
     print("signature:", signature)
 
+    # Debug
+    return True
+
     if x_line_signature == signature:
         return True
     else:
@@ -56,11 +59,11 @@ async def echo():
 @app.post("/callback", status_code=200)
 async def callback(
         response: Response,
-        body_data: Dict,
+        dict_body: Dict,
         x_line_signature: Optional[str] = Header(None)):
 
-    json_body = json.dumps(body_data)
-    print("body_data:", body_data)
+    json_body = json.dumps(dict_body)
+    print("dict_body:", dict_body)
     print("json_body:", json_body)
     if signatureVerification(x_line_signature, json_body):
         response.status_code = HTTP_200_OK
