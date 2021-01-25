@@ -55,7 +55,7 @@ async def echo():
 @app.post("/callback", status_code=200)
 async def callback(
         response: Response,
-        body_data: Dict,
+        body_data: List[Dict],
         x_line_signature: Optional[str] = Header(None)):
 
     print("x_line_signature:", x_line_signature)
