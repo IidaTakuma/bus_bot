@@ -34,12 +34,12 @@ CHANNEL_SECRET = settings.CS
 app = FastAPI()
 
 
-def signatureVerification(x_line_signature, request_body):
+def signatureVerification(x_line_signature, body):
     hash = hmac.new(CHANNEL_SECRET.encode('utf-8'),
-                    request_body.encode('utf-8'), hashlib.sha256).digest()
+                    body.encode('utf-8'), hashlib.sha256).digest()
     signature = base64.b64encode(hash)
 
-    # print(request_body)
+    print("signature:", signature)
 
     if x_line_signature == signature:
         return True
@@ -55,13 +55,14 @@ async def echo():
 @app.post("/callback", status_code=200)
 async def callback(
         response: Response,
-        body_data: List[Dict],
+        body_data: Dict,
         x_line_signature: Optional[str] = Header(None)):
 
     print("x_line_signature:", x_line_signature)
     print("body_data:", body_data)
 
     json_body = json.dumps(body_data)
+    print("json_body:", json_body)
     if signatureVerification(x_line_signature, json.dumps(json_body)):
         response.status_code = HTTP_200_OK
         return {"text": "OK!"}
