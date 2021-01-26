@@ -1,13 +1,7 @@
 import settings
-
-# 検証用
-import base64
-import hashlib
-import hmac
+import json
 
 from typing import (
-    Dict,
-    List,
     Optional,
 )
 from fastapi import (
@@ -16,33 +10,19 @@ from fastapi import (
     HTTPException,
     Request,
 )
-from pydantic import (
-    BaseModel
-)
 
-from starlette.responses import (
-    Response
-)
+from linebot import (LineBotApi, WebhookParser,)
+from linebot.exceptions import (InvalidSignatureError, LineBotApiError,)
+from linebot.models import (MessageEvent, TextSendMessage,)
 
-from starlette.status import (
-    HTTP_200_OK
-)
 
 CHANNEL_ACCESS_TOKEN = settings.CAT
 CHANNEL_SECRET = settings.CS
 
 app = FastAPI()
 
-
-def signatureVerification(x_line_signature, body):
-    hash = hmac.new(CHANNEL_SECRET.encode('utf-8'),
-                body, hashlib.sha256).digest()
-    signature = base64.b64encode(hash).decode('utf-8')
-
-   if x_line_signature == signature:
-        return True
-    else:
-        return False
+line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+webhock_parser = WebhookParser(CHANNEL_SECRET)
 
 
 @app.get("/echo")
@@ -53,13 +33,25 @@ async def echo():
 @app.post("/callback")
 async def callback(
         request: Request,
-        response: Response,
         x_line_signature: Optional[str] = Header(None)):
 
     body = await request.body()
 
-    if signatureVerification(x_line_signature, body):
-        response.status_code = HTTP_200_OK
-        return {"text": "OK!"}
-    else:
-        raise HTTPException(status_code=404, detail="Verification failed!!")
+    try:
+        events = webhock_parser.parse(body.decode('utf-8'), x_line_signature)
+    except InvalidSignatureError:
+        raise HTTPException(status_code=400, detail="Invalid signature error")
+    except LineBotApiError:
+        raise HTTPException(status_code=400, detail="Line bot api error")
+
+    for event in events:
+        if not isinstance(event, MessageEvent):
+            raise HTTPException(status_code=400, detail="Error occured")
+
+        if json.loads(str(event))['message']['type'] == 'text':
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="this is reply from bus bot")
+            )
+
+    return {'status': 'success'}
