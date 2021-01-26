@@ -13,7 +13,7 @@ from fastapi import (
 
 from linebot import (LineBotApi, WebhookParser,)
 from linebot.exceptions import (InvalidSignatureError, LineBotApiError,)
-from linebot.models import MessageEvent
+from linebot.models import (MessageEvent, TextSendMessage,)
 
 
 CHANNEL_ACCESS_TOKEN = settings.CAT
@@ -46,12 +46,12 @@ async def callback(
 
     for event in events:
         if not isinstance(event, MessageEvent):
-            raise HTTPException(status_code=400, detail="Error Occured")
+            raise HTTPException(status_code=400, detail="Error occured")
 
         if json.loads(str(event))['message']['type'] == 'text':
             line_bot_api.reply_message(
                 event.reply_token,
-                "this is reply from bus bot"
+                TextSendMessage(text="this is reply from bus bot")
             )
 
     return {'status': 'success'}
