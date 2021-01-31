@@ -45,8 +45,8 @@ async def callback(
         raise HTTPException(status_code=400, detail="Line bot api error")
 
     for event in events:
-        if not isinstance(event, MessageEvent):
-            raise HTTPException(status_code=404, detail="Error occured")
+        # if not isinstance(event, MessageEvent):
+        #     raise HTTPException(status_code=404, detail="Error occured")
 
         if (json.loads(str(event))['postback']['data'] == "TakatsukiToKansai"):
             line_bot_api.reply_message(
