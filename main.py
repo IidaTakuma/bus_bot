@@ -40,13 +40,34 @@ async def callback(
     try:
         events = webhock_parser.parse(body.decode('utf-8'), x_line_signature)
     except InvalidSignatureError:
-        raise HTTPException(status_code=400, detail="Invalid signature error")
+        raise HTTPException(status_code=401, detail="Invalid signature error")
     except LineBotApiError:
         raise HTTPException(status_code=400, detail="Line bot api error")
 
     for event in events:
-        if not isinstance(event, MessageEvent):
-            raise HTTPException(status_code=400, detail="Error occured")
+        # if not isinstance(event, MessageEvent):
+        #     raise HTTPException(status_code=404, detail="Error occured")
+
+        if (json.loads(str(event))['postback']['data'] == "TakatsukiToKansai"):
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="Takatsuki.St -> Kansai.Univ")
+            )
+        if (json.loads(str(event))['postback']['data'] == "TondaToKansai"):
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="Tonda.St -> Kansai.Univ")
+            )
+        if (json.loads(str(event))['postback']['data'] == "KansaiToTakatsuki"):
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="Kansai.Univ -> Takatsuki.St")
+            )
+        if (json.loads(str(event))['postback']['data'] == "KansaiToTonda"):
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="Kansai.Univ -> Tonda.St")
+            )
 
         if json.loads(str(event))['message']['type'] == 'text':
             line_bot_api.reply_message(
