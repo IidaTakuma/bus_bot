@@ -48,6 +48,7 @@ async def callback(
 
     for event in events:
         mode = json.loads(str(event))['postback']['data']
+        print(mode)
         if mode is not None:
             # モードは「TakatsukiToKansai」「TondaToKansai」「KansaiToTakatsuki」「KansaiToTonda」のどれか
             ret_text = make_response_text(mode)
