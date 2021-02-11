@@ -21,13 +21,13 @@ def calc_feture_bus_times(timetable: dict, now: int) -> tuple:
 
 def selectTimeTable(mode):
     if mode == "TakatsukiToKansai":
-        from .timetable import TAKATSUKI_TO_KANSAI as diagram
+        from timetable import TAKATSUKI_TO_KANSAI as diagram
     elif mode == "TondaToKansai":
-        from .timetable import TONDA_TO_KANSAI as diagram
+        from timetable import TONDA_TO_KANSAI as diagram
     elif mode == "KansaiToTakatsuki":
-        from .timetable import KANSAI_TO_TAKATSUKI as diagram
+        from timetable import KANSAI_TO_TAKATSUKI as diagram
     elif mode == "KansaiToTonda":
-        from .timetable import KANSAI_TO_TONDA as diagram
+        from timetable import KANSAI_TO_TONDA as diagram
     else:
         pass
 
