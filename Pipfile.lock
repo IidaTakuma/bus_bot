@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "586c595d61088ce3bd9a2bbd9d6a93ce1193871ce7035a4d08480d973678abda"
+            "sha256": "8ef4dfecca7967a32b65002553a6a6d7f98747c41c21a161757f9db6da6c33aa"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -65,6 +65,14 @@
             ],
             "version": "==2.10"
         },
+        "jpholiday": {
+            "hashes": [
+                "sha256:34fe7bc16b1c84aa4368157a2d4b9fbf859c238f18365c122303622bcf100d7b",
+                "sha256:59704b8a556715e10631f07da245f9badf686843309dd6cc614ab5bf565437ad"
+            ],
+            "index": "pypi",
+            "version": "==0.1.5"
+        },
         "line-bot-sdk": {
             "hashes": [
                 "sha256:4bd1aa75d430dc0237772300bd3c22dba43bbc3f7a647dc3f899afba4508e008",
@@ -99,6 +107,14 @@
                 "sha256:ffd180ebd5dd2a9ac0da4e8b995c9c99e7c74c31f985ba090ee01d681b1c4b95"
             ],
             "version": "==1.7.3"
+        },
+        "pytz": {
+            "hashes": [
+                "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da",
+                "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"
+            ],
+            "index": "pypi",
+            "version": "==2021.1"
         },
         "requests": {
             "hashes": [
