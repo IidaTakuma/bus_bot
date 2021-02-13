@@ -20,7 +20,7 @@ class TimeTable:
             ret.append("運行終了")
         return tuple(ret)
 
-    def make_dict_key() -> str:
+    def make_dict_key(self) -> str:
         jst_now = datetime.datetime.now(timezone('Asia/Tokyo'))
         return jst_now.hour * 60 + jst_now.minute
 
