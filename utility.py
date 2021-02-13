@@ -60,7 +60,8 @@ class TimeTableUtility:
 
     @classmethod
     def make_text(cls, timeTable: TimeTable) -> str:
-        text = "次のバスの時刻は\n" \
+        text = timeTable.distination + "\n" \
+            + "次のバスの時刻は\n" \
             + "[1]:" + timeTable.feture_schedule[0] + "\n" \
             + "[2]:" + timeTable.feture_schedule[1] + "\n" \
             + "[3]:" + timeTable.feture_schedule[2] + "\n"
