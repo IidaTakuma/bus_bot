@@ -27,7 +27,7 @@ class TimeTable:
 
 class TimeTableUtility:
     @classmethod
-    def selectTimeTable(mode: str) -> TimeTable:
+    def selectTimeTable(cls, mode: str) -> TimeTable:
         if mode == "TakatsukiToKansai":
             from timetable import TAKATSUKI_TO_KANSAI as diagram
             distination = "JR高槻駅 -> 関西大学"
@@ -55,11 +55,11 @@ class TimeTableUtility:
             pass
 
     @classmethod
-    def make_response_text(mode: str) -> str:
-        return TimeTableUtility.make_text(TimeTableUtility.selectTimeTable(mode))
+    def make_response_text(cls, mode: str) -> str:
+        return cls.make_text(cls.selectTimeTable(mode))
 
     @classmethod
-    def make_text(timeTable: TimeTable) -> str:
+    def make_text(cls, timeTable: TimeTable) -> str:
         text = "次のバスの時刻は\n" \
             + "[1]:" + timeTable.feture_schedule[0] + "\n" \
             + "[2]:" + timeTable.feture_schedule[1] + "\n" \
