@@ -1,33 +1,22 @@
 import settings
 import json
 
-from typing import (
-    Optional,
-)
-from fastapi import (
-    FastAPI,
-    Header,
-    HTTPException,
-    Request,
-)
+from typing import (Optional,)
+from fastapi import (FastAPI, Header, HTTPException, Request,)
 
 from linebot import (LineBotApi, WebhookParser,)
 from linebot.exceptions import (InvalidSignatureError, LineBotApiError,)
-from linebot.models import (MessageEvent, TextSendMessage,)
+from linebot.models import (TextSendMessage,)
+
+from utility import TimeTableUtility
 
 
 CHANNEL_ACCESS_TOKEN = settings.CAT
 CHANNEL_SECRET = settings.CS
 
 app = FastAPI()
-
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 webhock_parser = WebhookParser(CHANNEL_SECRET)
-
-
-@app.get("/echo")
-async def echo():
-    return {"message": "hello!!"}
 
 
 @app.post("/callback")
@@ -44,35 +33,14 @@ async def callback(
     except LineBotApiError:
         raise HTTPException(status_code=400, detail="Line bot api error")
 
+    # モードは "TakatsukiToKansai","TondaToKansai","KansaiToTakatsuki","KansaiToTonda"のいずれか
     for event in events:
-        # if not isinstance(event, MessageEvent):
-        #     raise HTTPException(status_code=404, detail="Error occured")
-
-        if (json.loads(str(event))['postback']['data'] == "TakatsukiToKansai"):
+        mode = json.loads(str(event))['postback']['data']
+        if mode is not None:
+            ret_text = TimeTableUtility.make_response_text(mode)
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="Takatsuki.St -> Kansai.Univ")
-            )
-        if (json.loads(str(event))['postback']['data'] == "TondaToKansai"):
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="Tonda.St -> Kansai.Univ")
-            )
-        if (json.loads(str(event))['postback']['data'] == "KansaiToTakatsuki"):
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="Kansai.Univ -> Takatsuki.St")
-            )
-        if (json.loads(str(event))['postback']['data'] == "KansaiToTonda"):
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="Kansai.Univ -> Tonda.St")
-            )
-
-        if json.loads(str(event))['message']['type'] == 'text':
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="this is reply from bus bot")
+                TextSendMessage(text=ret_text)
             )
 
     return {'status': 'success'}
