@@ -60,7 +60,7 @@ class TimeTableUtility:
             pass
 
     def make_response_text(self) -> str:
-        return self.make_text(self.timeTable)
+        return self.make_text()
 
     def make_text(self) -> str:
         text = self.timeTable.distination + "\n" \
