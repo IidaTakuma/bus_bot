@@ -50,11 +50,11 @@ class TimeTableUtility:
         jst_now = datetime.datetime.now(timezone('Asia/Tokyo'))
         is_holiday = jpholiday.is_holiday(jst_now)
         if is_holiday or jst_now.weekday() == 6:
-            return timeTable = TimeTable(distination, diagram.sunday)
+            return TimeTable(distination, diagram.sunday)
         elif jst_now.weekday() < 5:
-            return timeTable = TimeTable(distination, diagram.weekday)
+            return TimeTable(distination, diagram.weekday)
         elif jst_now.weekday() == 5:
-            return timeTable = TimeTable(distination, diagram.saturday)
+            return TimeTable(distination, diagram.saturday)
         else:
             pass
 
