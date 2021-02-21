@@ -6,7 +6,7 @@ from fastapi import (FastAPI, Header, HTTPException, Request,)
 
 from linebot import (LineBotApi, WebhookParser,)
 from linebot.exceptions import (InvalidSignatureError, LineBotApiError,)
-from linebot.models import (TextSendMessage,)
+from liine_bot_api_custom_utility import CustomTextSendMessage
 
 from utility import TimeTableUtility
 
@@ -42,10 +42,15 @@ async def callback(
     for event in events:
         mode = json.loads(str(event))['postback']['data']
         if mode is not None:
-            ret_text = TimeTableUtility.make_response_text(mode)
+            timeTable_utility = TimeTableUtility(mode)
+            messages = list()
+            next_three_bus_text = timeTable_utility.make_response_text()
+            messages.append(next_three_bus_text)
+            all_timeTable_text = timeTable_utility.make_all_timeTable_text()
+            messages.append(all_timeTable_text)
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=ret_text)
+                CustomTextSendMessage(_messages=messages)
             )
 
     return {'status': 'success'}
