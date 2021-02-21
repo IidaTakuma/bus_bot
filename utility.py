@@ -78,7 +78,7 @@ class TimeTableUtility:
             timeTable_dict.setdefault(hour_str, []).append(minute_str)
 
         timeTable_text = "----------"
-        for key, value in timeTable_dict:
+        for key, value in timeTable_dict.items():
             line = key + ": "
             for i, minute in enumerate(value):
                 line += minute
