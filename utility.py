@@ -29,10 +29,9 @@ class TimeTableUtility:
 
     def __init__(self, _mode: str):
         self.mode = _mode
-        self.timeTable = ""
-        self.set_timeTable()
+        self.timeTable = set_timeTable()
 
-    def set_timeTable(self):
+    def set_timeTable(self) -> TimeTable:
         if self.mode == "TakatsukiToKansai":
             from timetable import TAKATSUKI_TO_KANSAI as diagram
             distination = "JR高槻駅 -> 関西大学"
@@ -51,11 +50,11 @@ class TimeTableUtility:
         jst_now = datetime.datetime.now(timezone('Asia/Tokyo'))
         is_holiday = jpholiday.is_holiday(jst_now)
         if is_holiday or jst_now.weekday() == 6:
-            self.timeTable = TimeTable(distination, diagram.sunday)
+            return timeTable = TimeTable(distination, diagram.sunday)
         elif jst_now.weekday() < 5:
-            self.timeTable = TimeTable(distination, diagram.weekday)
+            return timeTable = TimeTable(distination, diagram.weekday)
         elif jst_now.weekday() == 5:
-            self.timeTable = TimeTable(distination, diagram.saturday)
+            return timeTable = TimeTable(distination, diagram.saturday)
         else:
             pass
 
@@ -72,6 +71,7 @@ class TimeTableUtility:
 
     def make_all_timeTable_text(self) -> str:
         timeTable_dict = {}
+        print("type -> timeTable.diagram", type(self.timeTable.diagram))
         for key, value in self.timeTable.diagram:
             hour_str = value[0:2]
             minute_str = value[2:4]
