@@ -29,7 +29,7 @@ class TimeTableUtility:
 
     def __init__(self, _mode: str):
         self.mode = _mode
-        self.timeTable = set_timeTable()
+        self.timeTable = self.set_timeTable()
 
     def set_timeTable(self) -> TimeTable:
         if self.mode == "TakatsukiToKansai":
