@@ -19,7 +19,7 @@ line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 webhock_parser = WebhookParser(CHANNEL_SECRET)
 
 
-@app.post("/echo")
+@app.get("/echo")
 async def echo():
     return {'status': 'success'}
 
