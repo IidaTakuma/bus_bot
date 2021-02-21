@@ -72,7 +72,7 @@ class TimeTableUtility:
 
     def make_all_timeTable_text(self) -> str:
         timeTable_dict = {}
-        for key, value in self.timeTable:
+        for key, value in self.timeTable.diagram:
             hour_str = value[0:2]
             minute_str = value[2:4]
             timeTable_dict.setdefault(hour_str, []).append(minute_str)
