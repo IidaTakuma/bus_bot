@@ -6,7 +6,7 @@ from fastapi import (FastAPI, Header, HTTPException, Request,)
 
 from linebot import (LineBotApi, WebhookParser,)
 from linebot.exceptions import (InvalidSignatureError, LineBotApiError,)
-from liine_bot_api_custom_utility import CustomTextSendMessage
+from liine_bot_api_custom_utility import (Message, CustomTextSendMessage)
 
 from utility import TimeTableUtility
 
@@ -44,10 +44,12 @@ async def callback(
         if mode is not None:
             timeTable_utility = TimeTableUtility(mode)
             messages = list()
-            next_three_bus_text = timeTable_utility.make_response_text()
-            messages.append(next_three_bus_text)
-            all_timeTable_text = timeTable_utility.make_all_timeTable_text()
-            messages.append(all_timeTable_text)
+            next_three_bus_message = Message(
+                timeTable_utility.make_response_text())
+            messages.append(next_three_bus_message)
+            all_timeTable_message = Message(
+                timeTable_utility.make_all_timeTable_text())
+            messages.append(all_timeTable_message)
             line_bot_api.reply_message(
                 event.reply_token,
                 CustomTextSendMessage(_messages=messages)
