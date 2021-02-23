@@ -1,3 +1,4 @@
+from linebot.models.base import Base
 from linebot.models.send_messages import SendMessage
 
 
@@ -12,7 +13,7 @@ class TextSendMessageCustom(SendMessage):
         self.messages = _messages
 
 
-class Message():
+class Message(Base):
     def __init__(self, _text):
         self.type = 'text'
         self.text = _text
