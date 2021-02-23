@@ -4,10 +4,10 @@ import json
 from typing import (Optional,)
 from fastapi import (FastAPI, Header, HTTPException, Request,)
 
-from linebot import (LineBotApi, WebhookParser,)
+from linebot import (WebhookParser,)
 from linebot.exceptions import (InvalidSignatureError, LineBotApiError,)
-from liine_bot_api_custom_utility import (Message, CustomTextSendMessage)
-
+from text_send_message_custom import (Message, CustomTextSendMessage)
+from line_bot_api_custom import LineBotApiCustom
 from utility import TimeTableUtility
 
 
@@ -15,7 +15,7 @@ CHANNEL_ACCESS_TOKEN = settings.CAT
 CHANNEL_SECRET = settings.CS
 
 app = FastAPI()
-line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+line_bot_api = LineBotApiCustom(CHANNEL_ACCESS_TOKEN)
 webhock_parser = WebhookParser(CHANNEL_SECRET)
 
 
