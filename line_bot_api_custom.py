@@ -1,6 +1,6 @@
 import json
 from linebot.api import LineBotApi
-from custom_text_send_message import (Message, CustomTextSendMessage)
+from text_send_message_custom import (Message, TextSendMessageCustom)
 
 
 class LineBotApiCustom(LineBotApi):
