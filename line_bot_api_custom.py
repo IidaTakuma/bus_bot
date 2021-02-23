@@ -9,8 +9,8 @@ class LineBotApiCustom(LineBotApi):
                       messages: TextSendMessageCustom,
                       notification_disabled=False,
                       timeout=None):
-        if not isinstance(messages, (list, tuple)):
-            messages = [messages]
+        # if not isinstance(messages, (list, tuple)):
+        #     messages = [messages]
 
         data = {
             'replyToken': reply_token,
