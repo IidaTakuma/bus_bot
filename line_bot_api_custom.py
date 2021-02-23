@@ -14,7 +14,7 @@ class LineBotApiCustom(LineBotApi):
 
         data = {
             'replyToken': reply_token,
-            'messages': [message.messages.as_json_dict() for message in messages],
+            'messages': [message.as_json_dict() for message in messages.messages],
             'notificationDisabled': notification_disabled,
         }
 
