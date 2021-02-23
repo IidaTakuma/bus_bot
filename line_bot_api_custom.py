@@ -6,7 +6,7 @@ from text_send_message_custom import (Message, TextSendMessageCustom)
 class LineBotApiCustom(LineBotApi):
     def reply_message(self,
                       reply_token,
-                      messages: CustomTextSendMessage,
+                      messages: TextSendMessageCustom,
                       notification_disabled=False,
                       timeout=None):
         if not isinstance(messages, (list, tuple)):
