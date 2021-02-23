@@ -44,12 +44,12 @@ async def callback(
         if mode is not None:
             timeTable_utility = TimeTableUtility(mode)
             messages = list()
-            next_three_bus_message = Message(
-                timeTable_utility.make_response_text())
-            messages.append(next_three_bus_message)
             all_timeTable_message = Message(
                 timeTable_utility.make_all_timeTable_text())
             messages.append(all_timeTable_message)
+            next_three_bus_message = Message(
+                timeTable_utility.make_response_text())
+            messages.append(next_three_bus_message)
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessageCustom(_messages=messages)

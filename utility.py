@@ -34,16 +34,16 @@ class TimeTableUtility:
     def set_timeTable(self) -> TimeTable:
         if self.mode == "TakatsukiToKansai":
             from timetable import TAKATSUKI_TO_KANSAI as diagram
-            distination = "JR高槻駅 -> 関西大学"
+            distination = "JR高槻駅->関西大学"
         elif self.mode == "TondaToKansai":
             from timetable import TONDA_TO_KANSAI as diagram
-            distination = "JR富田駅 -> 関西大学"
+            distination = "JR富田駅->関西大学"
         elif self.mode == "KansaiToTakatsuki":
             from timetable import KANSAI_TO_TAKATSUKI as diagram
-            distination = "関西大学 -> JR高槻駅"
+            distination = "関西大学->JR高槻駅"
         elif self.mode == "KansaiToTonda":
             from timetable import KANSAI_TO_TONDA as diagram
-            distination = "関西大学 -> JR富田駅"
+            distination = "関西大学->JR富田駅"
         else:
             pass
 
@@ -63,30 +63,43 @@ class TimeTableUtility:
 
     def make_text(self) -> str:
         text = self.timeTable.distination + "\n" \
-            + "次のバスの時刻は\n" \
-            + "[1]:" + self.timeTable.feture_schedule[0] + "\n" \
-            + "[2]:" + self.timeTable.feture_schedule[1] + "\n" \
-            + "[3]:" + self.timeTable.feture_schedule[2] + "\n"
+            + "現在時刻から次に来るバス\n" \
+            + "先発　：" + self.timeTable.feture_schedule[0] + "\n" \
+            + "次発　：" + self.timeTable.feture_schedule[1] + "\n" \
+            + "次次発：" + self.timeTable.feture_schedule[2] + "\n"
         return text
 
     def make_all_timeTable_text(self) -> str:
         timeTable_dict = {}
-        print("type -> timeTable.diagram", type(self.timeTable.diagram))
         for key, value in self.timeTable.diagram.items():
             hour_str = value[0:2]
-            minute_str = value[2:4]
+            minute_str = value[3:5]
             timeTable_dict.setdefault(hour_str, []).append(minute_str)
 
-        timeTable_text = "----------"
+        header = "本日の時刻表（" + self.timeTable.distination + "）\n"
+        header += "ーーーーーーーーーーーーーーーーー\n"
+        timeTable_text = ""
         for key, value in timeTable_dict.items():
-            line = key + ": "
+            timeTable_text += key + "："
             for i, minute in enumerate(value):
-                line += minute
-                if (i % 3 == 0) or (i - 1 == len(value)):
-                    line += "\n"
+                if i != 0 and i % 3 == 0:
+                    timeTable_text += "  　"
+                timeTable_text += minute
+                if (i % 3 == 2) or (i + 1 == len(value)):
+                    timeTable_text += "\n"
                 else:
-                    line += ", "
+                    timeTable_text += ", "
 
-            timeTable_text += line
+        footer = "ーーーーーーーーーーーーーーーーー\n"
 
-        return timeTable_text
+        return header + timeTable_text + footer
+
+
+def test():
+    timeTable_utility = TimeTableUtility("KansaiToTonda")
+    print(timeTable_utility.make_all_timeTable_text())
+    return
+
+
+if __name__ == "__main__":
+    test()
