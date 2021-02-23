@@ -6,7 +6,7 @@ from fastapi import (FastAPI, Header, HTTPException, Request,)
 
 from linebot import (WebhookParser,)
 from linebot.exceptions import (InvalidSignatureError, LineBotApiError,)
-from text_send_message_custom import (Message, CustomTextSendMessage)
+from text_send_message_custom import (Message, TextSendMessageCustom)
 from line_bot_api_custom import LineBotApiCustom
 from utility import TimeTableUtility
 
@@ -52,7 +52,7 @@ async def callback(
             messages.append(all_timeTable_message)
             line_bot_api.reply_message(
                 event.reply_token,
-                CustomTextSendMessage(_messages=messages)
+                TextSendMessageCustom(_messages=messages)
             )
 
     return {'status': 'success'}
