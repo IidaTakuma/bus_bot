@@ -76,21 +76,19 @@ class TimeTableUtility:
             minute_str = value[3:5]
             timeTable_dict.setdefault(hour_str, []).append(minute_str)
 
-        header = "本日の時刻表（" + self.timeTable.distination + "）\n"
-        header += "ーーーーーーーーーーーーーーーーー\n"
+        header = "本日の時刻表\n" + self.timeTable.distination + "\n"
+        header += "ーーーーーーーーーーーーーー\n"
         timeTable_text = ""
         for key, value in timeTable_dict.items():
-            timeTable_text += key + "："
+            timeTable_text += key + "｜"
             for i, minute in enumerate(value):
-                if i != 0 and i % 3 == 0:
-                    timeTable_text += "  　"
                 timeTable_text += minute
-                if (i % 3 == 2) or (i + 1 == len(value)):
+                if i + 1 == len(value):
                     timeTable_text += "\n"
                 else:
                     timeTable_text += ", "
 
-        footer = "ーーーーーーーーーーーーーーーーー\n"
+        footer = "ーーーーーーーーーーーーーー\n"
 
         return header + timeTable_text + footer
 
