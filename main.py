@@ -4,10 +4,10 @@ import json
 from typing import (Optional,)
 from fastapi import (FastAPI, Header, HTTPException, Request,)
 
-from linebot import (LineBotApi, WebhookParser,)
+from linebot import (WebhookParser,)
 from linebot.exceptions import (InvalidSignatureError, LineBotApiError,)
-from linebot.models import (TextSendMessage,)
-
+from text_send_message_custom import (Message, TextSendMessageCustom)
+from line_bot_api_custom import LineBotApiCustom
 from utility import TimeTableUtility
 
 
@@ -15,8 +15,13 @@ CHANNEL_ACCESS_TOKEN = settings.CAT
 CHANNEL_SECRET = settings.CS
 
 app = FastAPI()
-line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+line_bot_api = LineBotApiCustom(CHANNEL_ACCESS_TOKEN)
 webhock_parser = WebhookParser(CHANNEL_SECRET)
+
+
+@app.get("/echo")
+async def echo():
+    return {'status': 'success'}
 
 
 @app.post("/callback")
@@ -37,10 +42,17 @@ async def callback(
     for event in events:
         mode = json.loads(str(event))['postback']['data']
         if mode is not None:
-            ret_text = TimeTableUtility.make_response_text(mode)
+            timeTable_utility = TimeTableUtility(mode)
+            messages = list()
+            all_timeTable_message = Message(
+                timeTable_utility.make_all_timeTable_text())
+            messages.append(all_timeTable_message)
+            next_three_bus_message = Message(
+                timeTable_utility.make_response_text())
+            messages.append(next_three_bus_message)
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=ret_text)
+                TextSendMessageCustom(_messages=messages)
             )
 
     return {'status': 'success'}

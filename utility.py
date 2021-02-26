@@ -26,20 +26,24 @@ class TimeTable:
 
 
 class TimeTableUtility:
-    @classmethod
-    def selectTimeTable(cls, mode: str) -> TimeTable:
-        if mode == "TakatsukiToKansai":
+
+    def __init__(self, _mode: str):
+        self.mode = _mode
+        self.timeTable = self.set_timeTable()
+
+    def set_timeTable(self) -> TimeTable:
+        if self.mode == "TakatsukiToKansai":
             from timetable import TAKATSUKI_TO_KANSAI as diagram
-            distination = "JR高槻駅 -> 関西大学"
-        elif mode == "TondaToKansai":
+            distination = "JR高槻駅->関西大学"
+        elif self.mode == "TondaToKansai":
             from timetable import TONDA_TO_KANSAI as diagram
-            distination = "JR富田駅 -> 関西大学"
-        elif mode == "KansaiToTakatsuki":
+            distination = "JR富田駅->関西大学"
+        elif self.mode == "KansaiToTakatsuki":
             from timetable import KANSAI_TO_TAKATSUKI as diagram
-            distination = "関西大学 -> JR高槻駅"
-        elif mode == "KansaiToTonda":
+            distination = "関西大学->JR高槻駅"
+        elif self.mode == "KansaiToTonda":
             from timetable import KANSAI_TO_TONDA as diagram
-            distination = "関西大学 -> JR富田駅"
+            distination = "関西大学->JR富田駅"
         else:
             pass
 
@@ -54,15 +58,46 @@ class TimeTableUtility:
         else:
             pass
 
-    @classmethod
-    def make_response_text(cls, mode: str) -> str:
-        return cls.make_text(cls.selectTimeTable(mode))
+    def make_response_text(self) -> str:
+        return self.make_text()
 
-    @classmethod
-    def make_text(cls, timeTable: TimeTable) -> str:
-        text = timeTable.distination + "\n" \
-            + "次のバスの時刻は\n" \
-            + "[1]:" + timeTable.feture_schedule[0] + "\n" \
-            + "[2]:" + timeTable.feture_schedule[1] + "\n" \
-            + "[3]:" + timeTable.feture_schedule[2] + "\n"
+    def make_text(self) -> str:
+        text = self.timeTable.distination + "\n" \
+            + "現在時刻から次に来るバス\n" \
+            + "先発　：" + self.timeTable.feture_schedule[0] + "\n" \
+            + "次発　：" + self.timeTable.feture_schedule[1] + "\n" \
+            + "次次発：" + self.timeTable.feture_schedule[2] + "\n"
         return text
+
+    def make_all_timeTable_text(self) -> str:
+        timeTable_dict = {}
+        for key, value in self.timeTable.diagram.items():
+            hour_str = value[0:2]
+            minute_str = value[3:5]
+            timeTable_dict.setdefault(hour_str, []).append(minute_str)
+
+        header = "本日の時刻表\n" + self.timeTable.distination + "\n"
+        header += "ーーーーーーーーーーーーーー\n"
+        timeTable_text = ""
+        for key, value in timeTable_dict.items():
+            timeTable_text += key + "｜"
+            for i, minute in enumerate(value):
+                timeTable_text += minute
+                if i + 1 == len(value):
+                    timeTable_text += "\n"
+                else:
+                    timeTable_text += ", "
+
+        footer = "ーーーーーーーーーーーーーー\n"
+
+        return header + timeTable_text + footer
+
+
+def test():
+    timeTable_utility = TimeTableUtility("KansaiToTonda")
+    print(timeTable_utility.make_all_timeTable_text())
+    return
+
+
+if __name__ == "__main__":
+    test()
