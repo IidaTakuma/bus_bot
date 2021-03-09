@@ -2,3 +2,5 @@
 .DS_Store
 timetable
 media/richmenu
+*timetable/sample.py
+*timetable/__init__.py
