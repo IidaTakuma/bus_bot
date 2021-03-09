@@ -1,6 +1,6 @@
 .vscode
 .DS_Store
-timetable
+timetable/*
+!/timetable/sample.py
+!/timetable/__init__.py
 media/richmenu
-*timetable/sample.py
-*timetable/__init__.py
