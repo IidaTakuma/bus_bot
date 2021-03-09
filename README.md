@@ -1,10 +1,13 @@
 # README
 
-## 概要
+## Overview
 - 関大高槻キャンパス向けのバスの時刻表のLineBotです．
 - PythonのフレームワークFastAPIで作成されています．
 
-## 使用するには
+![](media/readme/image_1.png?raw=true)
+![](media/readme/image_2.png?raw=true)
+
+## How to Use
 - 以下のQRコードを読み取りLineの友達登録をする
 
 ![](media/readme/linebot_add_QR.png?raw=true)
